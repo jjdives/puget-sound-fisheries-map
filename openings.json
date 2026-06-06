@@ -1,0 +1,14 @@
+{
+  "last_updated": "2026-06-06T18:00:00Z",
+  "openings": [
+    {
+      "uid": "swin-crab-24a-20260522",
+      "agency": "Swinomish",
+      "species": "crab",
+      "catch_area": "24A",
+      "open_timestamp": "2026-05-22T06:00:00Z",
+      "close_timestamp": "2026-05-23T18:00:00Z",
+      "source_url": "https://www.swinomish-nsn.gov/fisheries/page/crab"
+    }
+  ]
+}
