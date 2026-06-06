@@ -1,0 +1,41 @@
+name: Trigger Puget Sound Fishery Scraper
+
+on:
+  schedule:
+    # Runs every 6 hours (at minute 0 of hours 0, 6, 12, 18 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows you to manually trigger the scraper with a button tap on your iPad
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Scraper Script
+      env:
+        # Passes your secret API key safely to the execution script
+        LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      run: python scraper.py
+
+    - name: Commit and Push updated data
+      run: |
+        git config --global user.name "Fishery Agent Bot"
+        git config --global user.email "actions@github.com"
+        git add openings.json
+        # Only commit if changes actually exist to avoid empty errors
+        git diff-index --quiet HEAD || git commit -m "Automated update of fishing openings"
+        git push
